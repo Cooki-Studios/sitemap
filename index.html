@@ -6,7 +6,7 @@
 	<link rel="shortcut icon" href="img/sitemap.png" type="image/png">
 </head>
 <body>
-	<button id="button">CLICK</button>
+	<button id="button">Download</button>
 	<script type="module">
         import {Octokit, App} from "https://esm.sh/octokit";
 
@@ -24,7 +24,7 @@
             } = await octokit.rest.users.getAuthenticated();
 
             // https://docs.github.com/en/rest/reference/issues#create-an-issue
-            const repo = await octokit.request("GET /repos/Cooki-Studios/cooki-studios.github.io/commits", {
+            const repo = await octokit.request("GET /repos/"+login+"/cooki-studios.github.io/commits", {
                 username: login,
                 api_key: apiKey,
             });
