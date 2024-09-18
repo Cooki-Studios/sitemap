@@ -6,34 +6,12 @@
 	<link rel="shortcut icon" href="img/sitemap.png" type="image/png">
 </head>
 <body>
+	<input id="user" type="text" placeholder="GitHub Username">
+	<select name="repo" id="repo">
+		<option value="">-Select a repo-</option>
+	</select>
 	<button id="button">Download</button>
-	<script type="module">
-        import {Octokit, App} from "https://esm.sh/octokit";
-
-        fetch("api_key.txt")
-            .then( r => r.text() )
-            .then( t => fetchRepo(t) )
-
-        async function fetchRepo(apiKey) {
-            // Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
-            const octokit = new Octokit({auth: apiKey});
-
-            // Compare: https://docs.github.com/en/rest/reference/users#get-the-authenticated-user
-            const {
-                data: {login},
-            } = await octokit.rest.users.getAuthenticated();
-
-            // https://docs.github.com/en/rest/reference/issues#create-an-issue
-            const repo = await octokit.request("GET /repos/"+login+"/cooki-studios.github.io/commits", {
-                username: login,
-                api_key: apiKey,
-            });
-
-            document.getElementById("button").onclick = () => {
-                ghFetchTime(JSON.stringify(repo), "cooki-studios.github.io")
-            }
-        }
-	</script>
+	<script type="module" src="scripts/api.js"></script>
 	<script src="scripts/sitemap.js"></script>
 </body>
 </html>
