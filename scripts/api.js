@@ -42,7 +42,7 @@ async function fetchRepos(apiKey) {
             data: {login},
         } = await octokit.rest.users.getAuthenticated();
 
-        apiRepos = await octokit.request("GET /users/"+login+"/repos", {
+        apiRepos = await octokit.request("GET /search/repositories?q=user:"+login, {
             username: login,
             api_key: apiKey,
         });
@@ -50,28 +50,32 @@ async function fetchRepos(apiKey) {
         const octokit = new Octokit();
         const login = document.getElementById("user").value;
 
-        apiRepos = await octokit.request("GET /users/"+login+"/repos", {
+        apiRepos = await octokit.request("GET /search/repositories?q=user:"+login, {
             username: login,
         });
     }
 
     document.getElementById("repo").innerHTML = "<option value=\"\">-Select a repo-</option>";
-    for (let i = 0; i < apiRepos.data.length; i++) {
+    for (let i = 0; i < apiRepos.data.items.length; i++) {
         let el = document.createElement("option");
-        el.innerHTML = apiRepos.data[i].name;
-        el.value = apiRepos.data[i].name;
+        el.innerHTML = apiRepos.data.items[i].name;
+        el.value = apiRepos.data.items[i].name;
         document.getElementById("repo").appendChild(el);
     }
 }
 
 document.getElementById("user").onblur = () => {
-    fetch("api_key.txt")
-        .then( r => {
-            if(r.ok) {
-                r.text();
-            } else {
-                return;
-            }
-        })
-        .then( t => fetchRepos(t))
+    if (document.getElementById("user").value.length > 39) {
+        fetchRepos(document.getElementById("user").value);
+    } else {
+        fetch("api_key.txt")
+            .then( r => {
+                if(r.ok) {
+                    r.text();
+                } else {
+                    return;
+                }
+            })
+            .then( t => fetchRepos(t))
+    }
 }

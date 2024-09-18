@@ -19,15 +19,19 @@ function download(contents) {
 }
 
 function ghFetchTime(repoContents,repo) {
-    fetch("api_key.txt")
-        .then( r => {
-            if(r.ok) {
-                r.text();
-            } else {
-                fetchRepos(document.getElementById("repo").value);
-            }
-        })
-        .then( t => fetchRepos(t) )
+    if (document.getElementById("user").value.length > 39) {
+        fetchRepos(document.getElementById("user").value);
+    } else {
+        fetch("api_key.txt")
+            .then(r => {
+                if (r.ok) {
+                    r.text();
+                } else {
+                    fetchRepos(document.getElementById("repo").value);
+                }
+            })
+            .then(t => fetchRepos(t))
+    }
 
     xml.splice(2,0,{contents:'   <url>\n'});
 
@@ -36,7 +40,7 @@ function ghFetchTime(repoContents,repo) {
             xml.splice(3,0,{contents:'      <loc>https://cookistudios.com/</loc>\n'});
             break;
         default:
-            xml.splice(3,0,{contents:'      <loc>https://'+repo+'test.cookistudios.com/</loc>\n'});
+            xml.splice(3,0,{contents:'      <loc>https://'+repo+'.cookistudios.com/</loc>\n'});
             break;
     }
 
