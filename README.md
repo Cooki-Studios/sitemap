@@ -1,4 +1,4 @@
-# Cooki's Sitemap Generator
+# Cooki's Sitemap Generator (COMING SOON)
 Easily generate a sitemap.xml file for your GitHub Pages (or regular) website!
 <br>
 <br>
