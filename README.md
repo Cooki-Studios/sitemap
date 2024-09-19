@@ -3,7 +3,7 @@ Easily generate a sitemap.xml file for your GitHub Pages (or regular) website!
 <br>
 <br>
 ## How to use
-Go to [https://sitemap.cookistudios.com](https://sitemap.cookistudios.com "Cooki's Sitemap Generator") and read the steps on screen.<br>
+Go to [https://cookistudios.com/sitemap](https://cookistudios.com/sitemap "Cooki's Sitemap Generator") and read the steps on screen.<br>
 <br>
 ## Private GitHub repositories
 For getting info for private GitHub repositories, you need a Personal Access Token. You can generate one at: [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new "Generate a Personal Access Token")
