@@ -33,8 +33,22 @@ async function fetchRepo(repo,apiKey) {
     }
 }
 
+const loadingStrs = ["Loading   ","Loading.  ","Loading.. ","Loading..."];
+let loadingInt = 0;
+let loadingInterval = undefined;
+function loadingTextAnim() {
+    document.getElementById("repo").innerHTML = "<option value=\"\">"+loadingStrs[loadingInt]+"</option>";
+    loadingInt++;
+    if (loadingInt > loadingStrs.length-1) {
+        loadingInt = 0;
+    }
+}
+
 let apiRepos;
 async function fetchRepos(apiKey) {
+    document.getElementById("repo").innerHTML = "<option value=\"\">Loading   </option>";
+    loadingInterval = window.setInterval(loadingTextAnim, 200);
+
     if (apiKey) {
         const octokit = new Octokit({auth: apiKey});
 
@@ -55,6 +69,7 @@ async function fetchRepos(apiKey) {
         });
     }
 
+    window.clearInterval(loadingInterval);
     document.getElementById("repo").innerHTML = "<option value=\"\">-Select a repo-</option>";
     for (let i = 0; i < apiRepos.data.items.length; i++) {
         let el = document.createElement("option");
@@ -65,6 +80,15 @@ async function fetchRepos(apiKey) {
 }
 
 document.getElementById("user").onblur = () => {
+    window.localStorage.setItem("userSave", document.getElementById("user").value);
+    userBlur();
+}
+
+function userBlur() {
+    if (loadingInterval != undefined) {
+        window.clearInterval(loadingInterval);
+    }
+
     if (document.getElementById("user").value.length > 39) {
         fetchRepos(document.getElementById("user").value);
     } else {
@@ -77,5 +101,12 @@ document.getElementById("user").onblur = () => {
                 }
             })
             .then( t => fetchRepos(t))
+    }
+}
+
+document.body.onload = () => {
+    if(window.localStorage.getItem('userSave')) {
+        document.getElementById('user').value = window.localStorage.getItem('userSave');
+        userBlur();
     }
 }

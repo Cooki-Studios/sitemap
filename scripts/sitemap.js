@@ -1,3 +1,15 @@
+if (window.localStorage.getItem("repoSave")) {
+    const repoSave = window.localStorage.getItem("repoSave");
+} else {
+    const repoSave = "";
+}
+
+if (window.localStorage.getItem("userSave")) {
+    const userSave = window.localStorage.getItem("userSave");
+} else {
+    const userSave = "";
+}
+
 const xml = [
     {contents:'<?xml version="1.0" encoding="UTF-8"?>\n\n'},
     {contents:'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'},
