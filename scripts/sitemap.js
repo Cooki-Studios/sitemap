@@ -31,20 +31,6 @@ function download(contents) {
 }
 
 function ghFetchTime(repoContents,repo) {
-    if (document.getElementById("user").value.length > 39) {
-        fetchRepos(document.getElementById("user").value);
-    } else {
-        fetch("api_key.txt")
-            .then(r => {
-                if (r.ok) {
-                    r.text();
-                } else {
-                    fetchRepos(document.getElementById("repo").value);
-                }
-            })
-            .then(t => fetchRepos(t))
-    }
-
     xml.splice(2,0,{contents:'   <url>\n'});
 
     switch (repo) {

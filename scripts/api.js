@@ -17,8 +17,9 @@ async function fetchRepo(repo,apiKey) {
         });
 
         document.getElementById("button").onclick = () => {
-            ghFetchTime(JSON.stringify(apiRepo), repo)
+            ghFetchTime(JSON.stringify(apiRepo), repo);
         }
+        document.getElementById("button").disabled = false;
     } else {
         const octokit = new Octokit();
         const login = document.getElementById("user").value;
@@ -28,8 +29,9 @@ async function fetchRepo(repo,apiKey) {
         });
 
         document.getElementById("button").onclick = () => {
-            ghFetchTime(JSON.stringify(apiRepo), repo)
+            ghFetchTime(JSON.stringify(apiRepo), repo);
         }
+        document.getElementById("button").disabled = false;
     }
 }
 
@@ -56,26 +58,48 @@ async function fetchRepos(apiKey) {
             data: {login},
         } = await octokit.rest.users.getAuthenticated();
 
-        apiRepos = await octokit.request("GET /search/repositories?q=user:"+login, {
-            username: login,
-            api_key: apiKey,
-        });
+        try {
+            apiRepos = await octokit.request("GET /search/repositories?q=user:" + login, {
+                username: login,
+                api_key: apiKey,
+            });
+
+            document.getElementById("repo").innerHTML = "<option value=\"\">-Select a repo-</option>";
+        } catch (error) {
+            console.log(error.message);
+            document.getElementById("repo").innerHTML = "<option value=\"\">ERROR: "+error.message+"</option>";
+        }
     } else {
         const octokit = new Octokit();
         const login = document.getElementById("user").value;
 
-        apiRepos = await octokit.request("GET /search/repositories?q=user:"+login, {
-            username: login,
-        });
-    }
+        try {
+            apiRepos = await octokit.request("GET /search/repositories?q=user:"+login, {
+                username: login
+            });
 
+            document.getElementById("repo").innerHTML = "<option value=\"\">-Select a repo-</option>";
+        } catch (error) {
+            console.log(error.message.split("message\":\"")[1].spli);
+            document.getElementById("repo").innerHTML = "<option value=\"\">ERROR: "+error.message+"</option>";
+        }
+    }
     window.clearInterval(loadingInterval);
-    document.getElementById("repo").innerHTML = "<option value=\"\">-Select a repo-</option>";
     for (let i = 0; i < apiRepos.data.items.length; i++) {
         let el = document.createElement("option");
         el.innerHTML = apiRepos.data.items[i].name;
         el.value = apiRepos.data.items[i].name;
         document.getElementById("repo").appendChild(el);
+    }
+
+    document.getElementById("repo").oninput = (e) => {
+        if (e.target.value != "") {
+            if (apiKey) {
+                fetchRepo(e.target.value, apiKey);
+            } else {
+                fetchRepo(e.target.value);
+            }
+        }
     }
 }
 
